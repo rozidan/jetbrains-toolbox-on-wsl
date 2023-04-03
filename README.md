@@ -35,6 +35,21 @@ In addition, "systemctl" is enabled by default, and an unprivileged user named "
 
    You can run 'wsl --update' to check for any WSL updates.
 
+## Quick Installation
+
+Open a PowerShell terminal and run
+
+```powershell
+ > Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a remote script the first time
+ > irm get.scoop.sh | iex
+```
+You can create an additional shortcuts by exec:
+
+```powershell
+>  jbtwsl.ps1 -Shortcut -ShortcutName 'WSL Intellij' -WslCommand 'idea'
+```
+
+
 ## Installation
 
 1. Clone to some directory (let say 'mydir') on your Windows machine, and cd to this folder
@@ -45,39 +60,39 @@ In addition, "systemctl" is enabled by default, and an unprivileged user named "
    > cd mydir
    ```
 
-2. build the image with the given Dockerfile and export it with '.tar' file type (let say mytar.tar), then move it into 'mydir' directory.
+2. Download the Jbtwsl image from [here](https://github.com/rozidan/jetbrains-toolbox-on-wsl/releases/download/v1.0.0/jbtwsl.tar), or build the image with the given Dockerfile and export it with '.tar' file type (let say mytar.tar), then move it into 'mydir' directory.
 
    > For example you can do that by clone to linux machine and execute the 'build.sh' script
 
-3. execute the jbwsl.ps1 script
+3. Execute the jbtwsl.ps1 script
 
    ```powershell
-   > .\jbwsl.ps1 -Install -InstallTarPath .\jetbrains-toolbox-wsl.tar
+   > .\jbtwsl.ps1 -Install -InstallTarPath .\jbtwsl.tar
    ```
 
 4. Enter the WSL shell and run 'jentbrains-toolbox'
 
    ```powershell
-   > wsl -d jetbrains-toolbox-wsl
+   > wsl -d jbtwsl
    [wsl@pc1]$ jetbrains-toolbox
    ```
 
 5. In addition, you can create a shortcut on your desktop, that will open the 'Jetbrains Toolbox' from the WSL you just installed
 
    ```powershell
-   >  .\jbwsl.ps1 -Shortcut -ShortcutName 'WSL Jetbrains Toolbox' -ShortcutWslCommand 'jetbrains-toolbox'
+   >  .\jbtwsl.ps1 -Shortcut -ShortcutName 'WSL Jetbrains Toolbox' -WslCommand 'jetbrains-toolbox'
    ```
 
    You can create a shortcut to the 'gnome terminal':
 
    ```powershell
-   >  .\jbwsl.ps1 -Shortcut -ShortcutName 'WSL Terminal' -ShortcutWslCommand 'gnome-terminal'
+   >  .\jbtwsl.ps1 -Shortcut -ShortcutName 'WSL Terminal' -WslCommand 'gnome-terminal'
    ```
 
    You can create a shortcut to the 'Intellij', after install it with the Jetbrains-Toolbox:
 
    ```powershell
-   >  .\jbwsl.ps1 -Shortcut -ShortcutName 'WSL Intellij' -ShortcutWslCommand 'idea'
+   >  .\jbtwsl.ps1 -Shortcut -ShortcutName 'WSL Intellij' -WslCommand 'idea'
    ```
 
 ## Installing JDK
@@ -143,3 +158,5 @@ $ sudo usermod -a -G docker wsl
 
 You can browse the Windows file system within the WSL by entering the '/mnt/c/' folder
 
+## Links
+Script code inspired by [get.scoop.sh]()
