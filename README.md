@@ -41,7 +41,7 @@ Open a PowerShell terminal and run
 
 ```powershell
  > Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a remote script the first time
- > irm get.scoop.sh | iex
+ > irm https://github.com/rozidan/jetbrains-toolbox-on-wsl/blob/main/install.ps1 | iex
 ```
 You can create an additional shortcuts by exec:
 
