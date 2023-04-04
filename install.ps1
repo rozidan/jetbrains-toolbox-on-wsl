@@ -350,7 +350,7 @@ function Install-Jbtwsl {
 
 function Install-JbtwslQuick {
     # Install Jbtwsl
-#    Install-Jbtwsl
+    Install-Jbtwsl
 
     # Add shortcut to desktop
     Add-JbtwslShortcut -name "Jetbrains-Toolbox on WSL" -command "jetbrains-toolbox"
