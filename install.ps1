@@ -331,6 +331,9 @@ function Install-Jbtwsl {
 
     Write-InstallInfo "Installing Jbtwsl image..."
     $res = wsl --import $distroName $JBTWSL_DIR $tarPath
+    if ($res -contains 'Error code: Wsl/Service/E_FAIL') {
+        Deny-Install "Installation failed: $res`nMaybe the tar file is corrupted, try to delete it and run installer again. (rm '$tarPath')"
+    }
     if (!((wsl --list --all -q) -contains $distroName)) {
         Deny-Install "Installation failed: $res"
     }
