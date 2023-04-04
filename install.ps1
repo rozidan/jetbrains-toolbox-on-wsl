@@ -350,7 +350,7 @@ function Install-Jbtwsl {
 
 function Install-JbtwslQuick {
     # Install Jbtwsl
-    Install-Jbtwsl
+#    Install-Jbtwsl
 
     # Add shortcut to desktop
     Add-JbtwslShortcut -name "Jetbrains-Toolbox on WSL" -command "jetbrains-toolbox"
@@ -358,9 +358,6 @@ function Install-JbtwslQuick {
     # Install Jbtwsl tool
     Write-InstallInfo "Installing Jbtwsl tool..."
     $JBTWSL_SCRIPT_CONTENT | Out-File -FilePath "$JBTWSL_DIR\jbtwsl.ps1"
-    if (-not(Test-Path -Path $profile -PathType Leaf)) {
-        New-Item -ItemType File -Force -Name $profile | Out-Null
-    }
     Add-JbtwslDirToPath
 
     Write-InstallInfo "Done."
