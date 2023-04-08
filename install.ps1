@@ -350,20 +350,22 @@ function Install-Jbtwsl {
 
 function Install-JbtwslQuick {
     # Install Jbtwsl
-    Install-Jbtwsl
+#    Install-Jbtwsl
 
     # Add shortcut to desktop
-    Add-JbtwslShortcut -name "Jetbrains-Toolbox on WSL" -command "jetbrains-toolbox"
-    Add-JbtwslShortcut -name "Terminal on WSL" -command "gnome-terminal"
+    Add-JbtwslShortcut -name 'Jetbrains-Toolbox on WSL' -command 'jetbrains-toolbox'
+    Add-JbtwslShortcut -name 'Terminal on WSL' -command 'gnome-terminal'
+
     # Install Jbtwsl tool
-    Write-InstallInfo "Installing Jbtwsl tool..."
-    $JBTWSL_SCRIPT_CONTENT | Out-File -FilePath "$JBTWSL_DIR\jbtwsl.ps1"
+    Write-InstallInfo 'Installing Jbtwsl tool...'
+    Invoke-DownloadFile -Uri $JBTWSL_TOOL_URL -FileName "$JBTWSL_DIR\jbtwsl.ps1"
     Add-JbtwslDirToPath
 
-    Write-InstallInfo "Done."
+    Write-InstallInfo 'Done.'
     Write-InstallInfo ' '
-    Write-InstallInfo "Now you can start Jetbrains-Toolbox from your desktop!"
-    Write-InstallInfo "Get more help by exec 'jbtwsl.ps1 -help'"
+    Write-InstallInfo 'Now you can start Jetbrains-Toolbox from your desktop!'
+    Write-InstallInfo 'Get more help by exec `jbtwsl.ps1 -Help`'
+    Write-InstallInfo ' '
 }
 
 function Add-JbtwslShortcut {
@@ -418,9 +420,9 @@ $IS_EXECUTED_FROM_IEX = ($null -eq $MyInvocation.MyCommand.Path)
 $JBTWSL_DIR = $JbtwslDir, $env:JBTWSL, "$env:USERPROFILE\jbtwsl" | Where-Object { -not [String]::IsNullOrEmpty($_) } | Select-Object -First 1
 $JBTWSL_DEFAULT_DISTRO_NAME = 'jbtwsl'
 $JBTWSL_IMAGE_URL = 'https://github.com/rozidan/jetbrains-toolbox-on-wsl/releases/download/v1.0.0/jbtwsl.tar'
+$JBTWSL_TOOL_URL = 'https://raw.githubusercontent.com/rozidan/jetbrains-toolbox-on-wsl/main/install.ps1'
 $JBTWSL_DEFAULT_IMAGE_PATH = "$JBTWSL_DIR\jbtwsl.tar"
 $JBTWSL_DEFAULT_SHORTCUT_PATH = Get-ItemPropertyValue -Path "Registry::HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "Desktop"
-$JBTWSL_SCRIPT_CONTENT = $MyInvocation.MyCommand.ScriptContents
 
 # Quit if anything goes wrong
 $oldErrorActionPreference = $ErrorActionPreference

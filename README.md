@@ -13,7 +13,7 @@ In addition, "systemctl" is enabled by default, and an unprivileged user named "
 ## Prerequisites
 
 1. Windows 11 or Windows 10 20h2 (10.0.19042.2604) </br>
-   Check your windows version on PowerShell:
+   Check your Windows version on PowerShell:
 
    ```powershell
    [System.Environment]::OSVersion.Version
@@ -41,24 +41,24 @@ Open a PowerShell terminal and run
 
 Method 1:
 ```powershell
- > Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a remote script the first time
- > irm https://raw.githubusercontent.com/rozidan/jetbrains-toolbox-on-wsl/main/install.ps1 | iex
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a remote script the first time
+irm https://raw.githubusercontent.com/rozidan/jetbrains-toolbox-on-wsl/main/install.ps1 | iex
 ```
 Method 2:
 ```powershell
- > iex "& {$(irm https://raw.githubusercontent.com/rozidan/jetbrains-toolbox-on-wsl/main/install.ps1)}"
+iex "& {$(irm https://raw.githubusercontent.com/rozidan/jetbrains-toolbox-on-wsl/main/install.ps1)}"
 ```
 
 Method 3:
 ```powershell
- > irm https://raw.githubusercontent.com/rozidan/jetbrains-toolbox-on-wsl/main/install.ps1 -outfile 'install.ps1'
- > .\install.ps1
+irm https://raw.githubusercontent.com/rozidan/jetbrains-toolbox-on-wsl/main/install.ps1 -outfile 'install.ps1'
+.\install.ps1
 ```
 
 You can create an additional shortcuts by exec:
 
 ```powershell
->  jbtwsl.ps1 -Shortcut -ShortcutName 'WSL Intellij' -WslCommand 'idea'
+jbtwsl.ps1 -Shortcut -ShortcutName 'WSL Intellij' -WslCommand 'idea'
 ```
 
 
@@ -67,44 +67,47 @@ You can create an additional shortcuts by exec:
 1. Clone to some directory (let say 'mydir') on your Windows machine, and cd to this folder
 
    ```powershell
-   > mkdir mydir
-   > git clone https://github.com/rozidan/jetbrains-toolbox-on-wsl.git
-   > cd mydir
+   mkdir mydir
+   git clone https://github.com/rozidan/jetbrains-toolbox-on-wsl.git
+   cd mydir
    ```
 
 2. Download the Jbtwsl image from [here](https://github.com/rozidan/jetbrains-toolbox-on-wsl/releases/download/v1.0.0/jbtwsl.tar), or build the image with the given Dockerfile and export it with '.tar' file type (let say mytar.tar), then move it into 'mydir' directory.
 
-   > For example you can do that by clone to linux machine and execute the 'build.sh' script
+   > For example, you can do that by clone to linux machine and execute the 'build.sh' script
 
 3. Execute the jbtwsl.ps1 script
 
    ```powershell
-   > .\jbtwsl.ps1 -Install -InstallTarPath .\jbtwsl.tar
+   .\jbtwsl.ps1 -Install -InstallTarPath .\jbtwsl.tar
    ```
 
 4. Enter the WSL shell and run 'jentbrains-toolbox'
 
    ```powershell
-   > wsl -d jbtwsl
-   [wsl@pc1]$ jetbrains-toolbox
+   wsl -d jbtwsl
+   ```
+   within WSL session:
+   ```bash
+   $ jetbrains-toolbox
    ```
 
 5. In addition, you can create a shortcut on your desktop, that will open the 'Jetbrains Toolbox' from the WSL you just installed
 
    ```powershell
-   >  .\jbtwsl.ps1 -Shortcut -ShortcutName 'WSL Jetbrains Toolbox' -WslCommand 'jetbrains-toolbox'
+   .\jbtwsl.ps1 -Shortcut -ShortcutName 'WSL Jetbrains Toolbox' -WslCommand 'jetbrains-toolbox'
    ```
 
    You can create a shortcut to the 'gnome terminal':
 
    ```powershell
-   >  .\jbtwsl.ps1 -Shortcut -ShortcutName 'WSL Terminal' -WslCommand 'gnome-terminal'
+   .\jbtwsl.ps1 -Shortcut -ShortcutName 'WSL Terminal' -WslCommand 'gnome-terminal'
    ```
 
    You can create a shortcut to the 'Intellij', after install it with the Jetbrains-Toolbox:
 
    ```powershell
-   >  .\jbtwsl.ps1 -Shortcut -ShortcutName 'WSL Intellij' -WslCommand 'idea'
+   .\jbtwsl.ps1 -Shortcut -ShortcutName 'WSL Intellij' -WslCommand 'idea'
    ```
 
 ## Installing JDK
