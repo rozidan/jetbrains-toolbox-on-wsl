@@ -359,6 +359,7 @@ function Install-JbtwslQuick {
     # Install Jbtwsl tool
     Write-InstallInfo 'Installing Jbtwsl tool...'
     Invoke-DownloadFile -Uri $JBTWSL_TOOL_URL -FileName "$JBTWSL_DIR\jbtwsl.ps1"
+    Invoke-DownloadFile -Uri $JBTWSL_RUN_UI_URL -FileName "$JBTWSL_DIR\run-wsl-ui.ps1"
     Add-JbtwslDirToPath
 
     Write-InstallInfo 'Done.'
@@ -387,12 +388,11 @@ function Add-JbtwslShortcut {
     }
 
     Write-InstallInfo "Creating '$name' shortcut on '$path'..."
-    $CurLoc = Get-Location
     $fullPath = "$path\$name.lnk"
     $WScriptObj = New-Object -ComObject ("WScript.Shell")
     $shortcut = $WscriptObj.CreateShortcut($fullPath)
     $shortcut.TargetPath = "cmd"
-    $shortcut.Arguments = "/c powershell.exe -File `"$CurLoc\run-wsl-ui.ps1`" -WslCommand `"$command`" -DistroName `"$distroName`""
+    $shortcut.Arguments = "/c powershell.exe -File `"$JBTWSL_DIR\run-wsl-ui.ps1`" -WslCommand `"$command`" -DistroName `"$distroName`""
     $shortcut.Save()
     Write-InstallInfo "Done."
 }
@@ -421,6 +421,7 @@ $JBTWSL_DIR = $JbtwslDir, $env:JBTWSL, "$env:USERPROFILE\jbtwsl" | Where-Object 
 $JBTWSL_DEFAULT_DISTRO_NAME = 'jbtwsl'
 $JBTWSL_IMAGE_URL = 'https://github.com/rozidan/jetbrains-toolbox-on-wsl/releases/download/v1.0.0/jbtwsl.tar'
 $JBTWSL_TOOL_URL = 'https://raw.githubusercontent.com/rozidan/jetbrains-toolbox-on-wsl/main/install.ps1'
+$JBTWSL_RUN_UI_URL = 'https://raw.githubusercontent.com/rozidan/jetbrains-toolbox-on-wsl/main/run-wsl-ui.ps1'
 $JBTWSL_DEFAULT_IMAGE_PATH = "$JBTWSL_DIR\jbtwsl.tar"
 $JBTWSL_DEFAULT_SHORTCUT_PATH = Get-ItemPropertyValue -Path "Registry::HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "Desktop"
 
