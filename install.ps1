@@ -77,7 +77,6 @@ function Write-InstallInfo {
     if ($ForegroundColor -ne $host.UI.RawUI.ForegroundColor) {
         $host.UI.RawUI.ForegroundColor = $ForegroundColor
     }
-
     Write-Output "$String"
 
     $host.UI.RawUI.ForegroundColor = $backup
@@ -338,14 +337,12 @@ function Install-Jbtwsl {
         Deny-Install "Installation failed: $res"
     }
 
-#    Write-InstallInfo "Updating Jbtwsl system distribution..."
-#    wsl --system -u root -d $distroName tdnf update -y | Out-Null
-#    wsl --system -u root -d $distroName tdnf install -y gdb | Out-Null
-
-#    Write-InstallInfo "Configuring..."
-#    Write-Output "[wsl2]`nmemory=8GB`nlocalhostforwarding=true`nguiApplications=true`n" > $Env:USERPROFILE\.wslconfig
-#    Write-Output "[system-distro-env]`nLIBGL_ALWAYS_SOFTWARE=1`nWESTON_RDPRAIL_SHELL_ALLOW_ZAP=true`n" > $Env:USERPROFILE\.wslgconfig
-    Write-InstallInfo "Done."
+    Write-InstallInfo "Updating Jbtwsl system distribution... (it will take some time)... "
+    wsl --system -u root -d $distroName --exec bash -c "tdnf update -y &>/dev/null"
+    wsl --system -u root -d $distroName --exec bash -c "tdnf install -y gdb &>/dev/null"
+    wsl --terminate $distroName | Out-Null
+    wsl -u root -d jbtwsl --exec bash -c "dnf update -y &>/dev/null"
+    wsl --terminate $distroName | Out-Null
 }
 
 function Install-JbtwslQuick {
@@ -354,7 +351,6 @@ function Install-JbtwslQuick {
 
     # Add shortcut to desktop
     Add-JbtwslShortcut -name 'Jetbrains-Toolbox on WSL' -command 'jetbrains-toolbox'
-    Add-JbtwslShortcut -name 'Terminal on WSL' -command 'gnome-terminal'
 
     # Install Jbtwsl tool
     Write-InstallInfo 'Installing Jbtwsl tool...'
@@ -362,7 +358,6 @@ function Install-JbtwslQuick {
     Invoke-DownloadFile -Uri $JBTWSL_RUN_UI_URL -FileName "$JBTWSL_DIR\run-wsl-ui.ps1"
     Add-JbtwslDirToPath
 
-    Write-InstallInfo 'Done.'
     Write-InstallInfo ' '
     Write-InstallInfo 'Now you can start Jetbrains-Toolbox from your desktop!'
     Write-InstallInfo 'Get more help by exec `jbtwsl.ps1 -Help`'
@@ -387,14 +382,14 @@ function Add-JbtwslShortcut {
         $distroName = $distro
     }
 
-    Write-InstallInfo "Creating '$name' shortcut on '$path'..."
+    Write-InstallInfo "Creating '$name' shortcut..."
     $fullPath = "$path\$name.lnk"
     $WScriptObj = New-Object -ComObject ("WScript.Shell")
     $shortcut = $WscriptObj.CreateShortcut($fullPath)
     $shortcut.TargetPath = "cmd"
     $shortcut.Arguments = "/c powershell.exe -File `"$JBTWSL_DIR\run-wsl-ui.ps1`" -WslCommand `"$command`" -DistroName `"$distroName`""
     $shortcut.Save()
-    Write-InstallInfo "Done."
+    
 }
 
 function Invoke-CommandHelp {
@@ -454,6 +449,9 @@ switch ($PsCmdlet.ParameterSetName) {
         Invoke-CommandHelp
     }
 }
+
+Write-InstallInfo 'Done!'
+Write-InstallInfo ' '
 
 # Reset $ErrorActionPreference to original value
 $ErrorActionPreference = $oldErrorActionPreference
