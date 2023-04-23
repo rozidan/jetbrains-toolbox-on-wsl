@@ -337,11 +337,9 @@ function Install-Jbtwsl {
         Deny-Install "Installation failed: $res"
     }
 
-    Write-InstallInfo "Updating Jbtwsl system distribution... (it will take some time)... "
-    wsl --system -u root -d $distroName --exec bash -c "tdnf update -y &>/dev/null"
-    wsl --system -u root -d $distroName --exec bash -c "tdnf install -y gdb &>/dev/null"
-    wsl --terminate $distroName | Out-Null
+    Write-InstallInfo "Updating Jbtwsl (it will take some time)... "
     wsl -u root -d jbtwsl --exec bash -c "dnf update -y &>/dev/null"
+
     wsl --terminate $distroName | Out-Null
 }
 

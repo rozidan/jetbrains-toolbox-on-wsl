@@ -174,4 +174,5 @@ $ sudo usermod -a -G docker wsl
 You can browse the Windows file system within the WSL by entering the '/mnt/c/' folder
 
 ## Links
-Script code inspired by [get.scoop.sh]()
+* Script code inspired by [get.scoop.sh]()
+* How to? [dev.to/bowmanjd](https://dev.to/bowmanjd/install-fedora-on-windows-subsystem-for-linux-wsl-4b26)
