@@ -39,20 +39,9 @@ In addition, "systemctl" is enabled by default, and an unprivileged user named "
 
 Open a PowerShell terminal and run
 
-Method 1:
 ```powershell
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a remote script the first time
-irm https://raw.githubusercontent.com/rozidan/jetbrains-toolbox-on-wsl/main/install.ps1 | iex
-```
-Method 2:
-```powershell
 iex "& {$(irm https://raw.githubusercontent.com/rozidan/jetbrains-toolbox-on-wsl/main/install.ps1)}"
-```
-
-Method 3:
-```powershell
-irm https://raw.githubusercontent.com/rozidan/jetbrains-toolbox-on-wsl/main/install.ps1 -outfile 'install.ps1'
-.\install.ps1
 ```
 
 You can create an additional shortcuts by exec:
