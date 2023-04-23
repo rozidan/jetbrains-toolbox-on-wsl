@@ -50,6 +50,7 @@ param (
     [String] $InstallTarPath,
     [Parameter(ParameterSetName = 'Install')]
     [Parameter(ParameterSetName = 'Shortcut')]
+    [Parameter(ParameterSetName = 'Quick')]
     [String] $WslDistroName,
     [Parameter(ParameterSetName = 'Shortcut')]
     [String] $ShortcutName,
@@ -151,8 +152,8 @@ function Test-Prerequisite {
 
     # Test if jbtwsl is installed, by checking if jbtwsl command exists.
     if ($PsCmdlet.ParameterSetName -ne 'Shortcut') {
-        if ([bool](Get-Command -Name 'jbtwsl' -ErrorAction SilentlyContinue)) {
-            Deny-Install "Jbtwsl is already installed"
+        if ([bool](Get-Command -Name $JBTWSL_DISTRO_NAME -ErrorAction SilentlyContinue)) {
+            Deny-Install "Jbtwsl with distro name '$JBTWSL_DISTRO_NAME' is already installed"
         }
     }
 }
@@ -304,43 +305,33 @@ function Install-Jbtwsl {
     # Enable TLS 1.2
     Optimize-SecurityProtocol
 
-    $distroName = $JBTWSL_DEFAULT_DISTRO_NAME
-    if ($WslDistroName) {
-        $distroName = $WslDistroName
-    }
-
     # Stop installation when distro name already exists
-    if ((wsl --list --all -q) -contains $distroName) {
-        Deny-Install "Jbtwsl distro name '$distroName' already exists"
-    }
-
-    $tarPath = $JBTWSL_DEFAULT_IMAGE_PATH
-    if ($InstallTarPath) {
-        $tarPath = $InstallTarPath
+    if ((wsl --list --all -q) -contains $JBTWSL_DISTRO_NAME) {
+        Deny-Install "Jbtwsl distro name '$JBTWSL_DISTRO_NAME' already exists"
     }
 
     # Downloading jbtwsl image if 'InstallTarPath' is not set or not exists
-    if (-not(Test-Path -Path $tarPath)) {
-        Write-InstallInfo "Downloading Jbtwsl image..."
-        New-Item -ItemType Directory -Force -Path $(Split-Path $tarPath -Parent) | Out-Null
-        Invoke-DownloadFile -Uri $JBTWSL_IMAGE_URL -FileName $tarPath
+    if (-not(Test-Path -Path $JBTWSL_IMAGE_PATH)) {
+        Write-InstallInfo "Downloading Jbtwsl..."
+        New-Item -ItemType Directory -Force -Path $(Split-Path $JBTWSL_IMAGE_PATH -Parent) | Out-Null
+        Invoke-DownloadFile -Uri $JBTWSL_IMAGE_URL -FileName $JBTWSL_IMAGE_PATH
     } else {
         Write-InstallInfo "Image file already presents, skip download..."
     }
 
-    Write-InstallInfo "Installing Jbtwsl image..."
-    $res = wsl --import $distroName $JBTWSL_DIR $tarPath
+    Write-InstallInfo "Installing Jbtwsl..."
+    $res = wsl --import $JBTWSL_DISTRO_NAME $JBTWSL_DIR $JBTWSL_IMAGE_PATH
     if ($res -contains 'Error code: Wsl/Service/E_FAIL') {
-        Deny-Install "Installation failed: $res`nMaybe the tar file is corrupted, try to delete it and run installer again. (rm '$tarPath')"
+        Deny-Install "Installation failed: $res`nMaybe the tar file is corrupted, try to delete it and run installer again. (rm '$JBTWSL_IMAGE_PATH')"
     }
-    if (!((wsl --list --all -q) -contains $distroName)) {
+    if (!((wsl --list --all -q) -contains $JBTWSL_DISTRO_NAME)) {
         Deny-Install "Installation failed: $res"
     }
 
     Write-InstallInfo "Updating Jbtwsl (it will take some time)... "
-    wsl -u root -d jbtwsl --exec bash -c "dnf update -y &>/dev/null"
+    wsl -u root -d $JBTWSL_DISTRO_NAME --exec bash -c "dnf update -y &>/dev/null"
 
-    wsl --terminate $distroName | Out-Null
+    wsl --terminate $JBTWSL_DISTRO_NAME | Out-Null
 }
 
 function Install-JbtwslQuick {
@@ -348,7 +339,7 @@ function Install-JbtwslQuick {
     Install-Jbtwsl
 
     # Add shortcut to desktop
-    Add-JbtwslShortcut -name 'Jetbrains-Toolbox on WSL' -command 'jetbrains-toolbox'
+    Add-JbtwslShortcut -name 'WSL Jetbrains-Toolbox' -command 'jetbrains-toolbox'
 
     # Install Jbtwsl tool
     Write-InstallInfo 'Installing Jbtwsl tool...'
@@ -411,12 +402,20 @@ $IS_EXECUTED_FROM_IEX = ($null -eq $MyInvocation.MyCommand.Path)
 
 # Jbtwsl root directory
 $JBTWSL_DIR = $JbtwslDir, $env:JBTWSL, "$env:USERPROFILE\jbtwsl" | Where-Object { -not [String]::IsNullOrEmpty($_) } | Select-Object -First 1
-$JBTWSL_DEFAULT_DISTRO_NAME = 'jbtwsl'
 $JBTWSL_IMAGE_URL = 'https://github.com/rozidan/jetbrains-toolbox-on-wsl/releases/download/v1.0.0/jbtwsl.tar'
 $JBTWSL_TOOL_URL = 'https://raw.githubusercontent.com/rozidan/jetbrains-toolbox-on-wsl/main/install.ps1'
 $JBTWSL_RUN_UI_URL = 'https://raw.githubusercontent.com/rozidan/jetbrains-toolbox-on-wsl/main/run-wsl-ui.ps1'
-$JBTWSL_DEFAULT_IMAGE_PATH = "$JBTWSL_DIR\jbtwsl.tar"
 $JBTWSL_DEFAULT_SHORTCUT_PATH = Get-ItemPropertyValue -Path "Registry::HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "Desktop"
+
+$JBTWSL_DISTRO_NAME = 'jbtwsl'
+if ($WslDistroName) {
+    $JBTWSL_DISTRO_NAME = $WslDistroName
+}
+
+$JBTWSL_IMAGE_PATH = "$JBTWSL_DIR\jbtwsl.tar"
+if ($InstallTarPath) {
+    $JBTWSL_IMAGE_PATH = $InstallTarPath
+}
 
 # Quit if anything goes wrong
 $oldErrorActionPreference = $ErrorActionPreference
