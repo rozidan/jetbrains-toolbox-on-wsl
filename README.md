@@ -44,7 +44,7 @@ Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a 
 iex "& {$(irm https://raw.githubusercontent.com/rozidan/jetbrains-toolbox-on-wsl/main/install.ps1)}"
 ```
 
-You can create an additional shortcuts by exec:
+If you decided to install Intellij with the Toolbox, you may make a shortcut to it by executing the following commands:
 
 ```powershell
 jbtwsl.ps1 -Shortcut -ShortcutName 'WSL Intellij' -WslCommand 'idea'
