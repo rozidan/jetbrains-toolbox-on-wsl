@@ -68,7 +68,7 @@ jbtwsl.ps1 -ShortcutName 'WSL Intellij' -WslCommand 'idea'
 3. Execute the jbtwsl.ps1 script
 
    ```powershell
-   jbtwsl.ps1 -InstallTarPath .\jbtwsl.tar
+   ./install.ps1 -InstallTarPath .\jbtwsl.tar
    ```
 
 4. Enter the WSL shell and run 'jentbrains-toolbox'
