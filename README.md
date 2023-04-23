@@ -39,26 +39,15 @@ In addition, "systemctl" is enabled by default, and an unprivileged user named "
 
 Open a PowerShell terminal and run
 
-Method 1:
 ```powershell
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a remote script the first time
-irm https://raw.githubusercontent.com/rozidan/jetbrains-toolbox-on-wsl/main/install.ps1 | iex
-```
-Method 2:
-```powershell
 iex "& {$(irm https://raw.githubusercontent.com/rozidan/jetbrains-toolbox-on-wsl/main/install.ps1)}"
 ```
 
-Method 3:
-```powershell
-irm https://raw.githubusercontent.com/rozidan/jetbrains-toolbox-on-wsl/main/install.ps1 -outfile 'install.ps1'
-.\install.ps1
-```
-
-You can create an additional shortcuts by exec:
+If you decided to install Intellij with the Toolbox, you may make a shortcut to it by executing the following commands:
 
 ```powershell
-jbtwsl.ps1 -Shortcut -ShortcutName 'WSL Intellij' -WslCommand 'idea'
+jbtwsl.ps1 -ShortcutName 'WSL Intellij' -WslCommand 'idea'
 ```
 
 
@@ -79,7 +68,7 @@ jbtwsl.ps1 -Shortcut -ShortcutName 'WSL Intellij' -WslCommand 'idea'
 3. Execute the jbtwsl.ps1 script
 
    ```powershell
-   .\jbtwsl.ps1 -InstallTarPath .\jbtwsl.tar
+   ./install.ps1 -InstallTarPath .\jbtwsl.tar
    ```
 
 4. Enter the WSL shell and run 'jentbrains-toolbox'
@@ -95,19 +84,19 @@ jbtwsl.ps1 -Shortcut -ShortcutName 'WSL Intellij' -WslCommand 'idea'
 5. In addition, you can create a shortcut on your desktop, that will open the 'Jetbrains Toolbox' from the WSL you just installed
 
    ```powershell
-   .\jbtwsl.ps1 -ShortcutName 'WSL Jetbrains Toolbox' -WslCommand 'jetbrains-toolbox'
+   jbtwsl.ps1 -ShortcutName 'WSL Jetbrains Toolbox' -WslCommand 'jetbrains-toolbox'
    ```
 
    You can create a shortcut to the 'gnome terminal':
 
    ```powershell
-   .\jbtwsl.ps1 -ShortcutName 'WSL Terminal' -WslCommand 'gnome-terminal'
+   jbtwsl.ps1 -ShortcutName 'WSL Terminal' -WslCommand 'gnome-terminal'
    ```
 
    You can create a shortcut to the 'Intellij', after install it with the Jetbrains-Toolbox:
 
    ```powershell
-   .\jbtwsl.ps1 -ShortcutName 'WSL Intellij' -WslCommand 'idea'
+   jbtwsl.ps1 -ShortcutName 'WSL Intellij' -WslCommand 'idea'
    ```
 
 ## Installing JDK
