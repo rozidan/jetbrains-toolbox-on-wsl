@@ -1,8 +1,10 @@
 FROM fedora:37
 ARG USER_NAME="wsl"
+RUN dnf install -y  man man-pages
+RUN dnf reinstall -y $(dnf repoquery --installed --qf "%{name}")
 RUN dnf update -y && \
     dnf group install -y "Minimal Install" "base-x" && \
-    dnf install -y vim nano man man-pages bash-completion glibc-langpack-en xorg-x11-fonts* gnome-terminal gedit fuse zip python python2 python-pip dos2unix git dnf-plugins-core
+    dnf install -y vim nano bash-completion glibc-langpack-en xorg-x11-fonts* gnome-terminal gedit fuse zip python python2 python-pip dos2unix git dnf-plugins-core
 COPY --chmod=0755 adoptium.repo /etc/yum.repos.d/adoptium.repo
 RUN dnf update -y
 RUN echo "LANG=en_US.UTF-8" | tee -a /etc/default/locale
