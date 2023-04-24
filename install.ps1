@@ -280,9 +280,9 @@ function Add-JbtwslDirToPath {
 
         if (!($h -eq '\')) {
             $friendlyPath = "$JBTWSL_DIR" -Replace ([Regex]::Escape($h)), "~\"
-            Write-InstallInfo "Adding $friendlyPath to your path."
+            Write-InstallInfo "Adding $friendlyPath to your path..."
         } else {
-            Write-InstallInfo "Adding $JBTWSL_DIR to your path."
+            Write-InstallInfo "Adding $JBTWSL_DIR to your path..."
         }
 
         # For future sessions
