@@ -366,17 +366,12 @@ function Add-JbtwslShortcut {
         $path = $pathTo
     }
 
-    $distroName = $JBTWSL_DEFAULT_DISTRO_NAME
-    if ($distro) {
-        $distroName = $distro
-    }
-
     Write-InstallInfo "Creating '$name' shortcut..."
     $fullPath = "$path\$name.lnk"
     $WScriptObj = New-Object -ComObject ("WScript.Shell")
     $shortcut = $WscriptObj.CreateShortcut($fullPath)
     $shortcut.TargetPath = "cmd"
-    $shortcut.Arguments = "/c powershell.exe -File `"$JBTWSL_DIR\run-wsl-ui.ps1`" -WslCommand `"$command`" -DistroName `"$distroName`""
+    $shortcut.Arguments = "/c powershell.exe -File `"$JBTWSL_DIR\run-wsl-ui.ps1`" -WslCommand `"$command`" -DistroName `"$JBTWSL_DISTRO_NAME`""
     $shortcut.Save()
     
 }
@@ -433,7 +428,7 @@ switch ($PsCmdlet.ParameterSetName) {
     "Shortcut" {
         Test-Prerequisite
         Test-ValidateParameterShortcut
-        Add-JbtwslShortcut -command $WslCommand -name $ShortcutName -path $ShortcutPath -distro $WslDistroName
+        Add-JbtwslShortcut -command $WslCommand -name $ShortcutName -path $ShortcutPath -distro $JBTWSL_DISTRO_NAME
     }
     "Quick" {
         Test-Prerequisite
