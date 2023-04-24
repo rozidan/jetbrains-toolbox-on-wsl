@@ -339,7 +339,7 @@ function Install-JbtwslQuick {
     Install-Jbtwsl
 
     # Add shortcut to desktop
-    Add-JbtwslShortcut -name 'WSL Jetbrains-Toolbox' -command 'jetbrains-toolbox'
+    Add-JbtwslShortcut -name 'WSL Jetbrains Toolbox' -command 'jetbrains-toolbox'
 
     # Install Jbtwsl tool
     Write-InstallInfo 'Installing Jbtwsl tool...'
